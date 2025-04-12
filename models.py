@@ -1,41 +1,57 @@
-from sqlalchemy import Column, String, Integer, Float, ForeignKey, DateTime, Text, Boolean
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, Integer, String, DateTime, Float, Text, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
-import uuid
-import datetime
+from sqlalchemy.sql import func
 from database import Base
 
-class Call(Base):
-    __tablename__ = "calls"
-    
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    agent_id = Column(String, nullable=False)
-    customer_id = Column(String, nullable=True)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
-    duration = Column(Float, nullable=True)
-    hold_time = Column(Float, default=0.0)
-    dead_air_time = Column(Float, default=0.0)
-    overtalk_count = Column(Integer, default=0)
-    transcription = Column(Text, nullable=True)
-    audio_path = Column(String, nullable=False)
-    processing_status = Column(String, default="pending")  # pending, processing, completed, failed
-    error_message = Column(Text, nullable=True)
-    language = Column(String, default="en")
-    is_deleted = Column(Boolean, default=False)
-    
-    segments = relationship("Segment", back_populates="call", cascade="all, delete-orphan")
+class CallRecording(Base):
+    __tablename__ = "call_recordings"
 
-class Segment(Base):
-    __tablename__ = "segments"
+    id = Column(Integer, primary_key=True, index=True)
+    filename = Column(String(255), unique=True, index=True)
+    file_path = Column(String(512))
+    duration = Column(Float)
+    status = Column(String(50))  # pending, processing, completed, failed
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    call_id = Column(UUID(as_uuid=True), ForeignKey("calls.id", ondelete="CASCADE"))
-    speaker = Column(String, nullable=False)
-    start_time = Column(Float, nullable=False)
-    end_time = Column(Float, nullable=False)
-    text = Column(Text, nullable=False)
-    sentiment = Column(String, nullable=True)
-    confidence = Column(Float, nullable=True)
-    speaker_type = Column(String, nullable=True)  # agent, customer, system
+    # Relationships
+    transcriptions = relationship("Transcription", back_populates="recording")
+    silence_analysis = relationship("SilenceAnalysis", back_populates="recording")
+    overtalk_analysis = relationship("OvertalkAnalysis", back_populates="recording")
+
+class Transcription(Base):
+    __tablename__ = "transcriptions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    recording_id = Column(Integer, ForeignKey("call_recordings.id"))
+    text = Column(Text)
+    confidence = Column(Float)
+    language = Column(String(50))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
     
-    call = relationship("Call", back_populates="segments") 
+    # Relationship
+    recording = relationship("CallRecording", back_populates="transcriptions")
+
+class SilenceAnalysis(Base):
+    __tablename__ = "silence_analysis"
+
+    id = Column(Integer, primary_key=True, index=True)
+    recording_id = Column(Integer, ForeignKey("call_recordings.id"))
+    total_silence_duration = Column(Float)
+    silence_percentage = Column(Float)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    
+    # Relationship
+    recording = relationship("CallRecording", back_populates="silence_analysis")
+
+class OvertalkAnalysis(Base):
+    __tablename__ = "overtalk_analysis"
+
+    id = Column(Integer, primary_key=True, index=True)
+    recording_id = Column(Integer, ForeignKey("call_recordings.id"))
+    total_overtalk_duration = Column(Float)
+    overtalk_percentage = Column(Float)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    
+    # Relationship
+    recording = relationship("CallRecording", back_populates="overtalk_analysis") 
