@@ -1,20 +1,27 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 from dotenv import load_dotenv
 import logging
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
 # Load environment variables
 load_dotenv()
-
-# Configure logging
-logger = logging.getLogger(__name__)
 
 # Get database URL from environment variables
 DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
+    logger.error("DATABASE_URL environment variable is not set")
     raise ValueError("DATABASE_URL environment variable is not set")
+
+logger.info(f"Attempting to connect to database with URL: {DATABASE_URL}")
 
 try:
     # Create SQLAlchemy engine
@@ -23,8 +30,14 @@ try:
         pool_size=5,
         max_overflow=10,
         pool_timeout=30,
-        pool_recycle=1800
+        pool_recycle=1800,
+        echo=True  # Enable SQL query logging
     )
+    
+    # Test the connection
+    with engine.connect() as connection:
+        result = connection.execute(text("SELECT 1"))
+        logger.info("Database connection test successful")
     
     # Create session factory
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

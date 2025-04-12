@@ -3,6 +3,7 @@ import logging
 from celery import Celery
 from sqlalchemy.orm import Session
 import uuid
+import time
 
 from database import SessionLocal
 from models import Call, Segment
@@ -21,6 +22,13 @@ celery = Celery(
     broker=os.getenv("REDIS_URL", "redis://localhost:6379/0"),
     backend=os.getenv("REDIS_URL", "redis://localhost:6379/0")
 )
+
+@celery.task
+def test_task(message: str):
+    """Test task to verify Celery is working"""
+    logger.info(f"Received test message: {message}")
+    time.sleep(2)  # Simulate some work
+    return f"Processed message: {message}"
 
 @celery.task(bind=True, max_retries=3)
 def process_call(self, call_id: str):

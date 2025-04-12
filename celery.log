@@ -1,0 +1,39 @@
+2025-04-10 15:52:18,637 - py.warnings - WARNING - C:\Users\gaura\OneDrive\Desktop\my_pjt_new\pjt_env\lib\site-packages\billiard\pool.py:1022: UserWarning: Soft timeouts are not supported: on this platform: It does not have the SIGUSR1 signal.
+  warnings.warn(UserWarning(
+
+2025-04-10 15:52:18,757 - py.warnings - WARNING - C:\Users\gaura\OneDrive\Desktop\my_pjt_new\pjt_env\lib\site-packages\celery\worker\consumer\consumer.py:507: CPendingDeprecationWarning: The broker_connection_retry configuration setting will no longer determine
+whether broker connection retries are made during startup in Celery 6.0 and above.
+If you wish to retain the existing behavior for retrying connections on startup,
+you should set broker_connection_retry_on_startup to True.
+  warnings.warn(
+
+2025-04-10 15:52:19,276 - celery.worker.consumer.connection - INFO - Connected to redis://localhost:6379/0
+2025-04-10 15:52:19,277 - py.warnings - WARNING - C:\Users\gaura\OneDrive\Desktop\my_pjt_new\pjt_env\lib\site-packages\celery\worker\consumer\consumer.py:507: CPendingDeprecationWarning: The broker_connection_retry configuration setting will no longer determine
+whether broker connection retries are made during startup in Celery 6.0 and above.
+If you wish to retain the existing behavior for retrying connections on startup,
+you should set broker_connection_retry_on_startup to True.
+  warnings.warn(
+
+2025-04-10 15:52:19,315 - celery.worker.consumer.mingle - INFO - mingle: searching for neighbors
+2025-04-10 15:52:20,446 - celery.worker.consumer.mingle - INFO - mingle: all alone
+2025-04-10 15:52:20,568 - celery.apps.worker - INFO - celery@Radhe-Radhe ready.
+2025-04-10 15:58:52,476 - celery.worker.consumer.connection - INFO - Connected to redis://localhost:6379/0
+2025-04-10 15:58:52,482 - celery.worker.consumer.mingle - INFO - mingle: searching for neighbors
+2025-04-10 15:58:53,527 - celery.worker.consumer.mingle - INFO - mingle: all alone
+2025-04-10 15:58:53,583 - celery.apps.worker - INFO - celery@Radhe-Radhe ready.
+2025-04-10 16:24:31,228 - celery.worker.consumer.connection - INFO - Connected to redis://localhost:6379/0
+2025-04-10 16:24:31,236 - celery.worker.consumer.mingle - INFO - mingle: searching for neighbors
+2025-04-10 16:24:32,288 - celery.worker.consumer.mingle - INFO - mingle: all alone
+2025-04-10 16:24:32,419 - celery.apps.worker - INFO - celery@Radhe-Radhe ready.
+2025-04-10 16:51:45,531 - celery.worker.consumer.connection - INFO - Connected to redis://localhost:6379/0
+2025-04-10 16:51:45,559 - celery.worker.consumer.mingle - INFO - mingle: searching for neighbors
+2025-04-10 16:51:46,617 - celery.worker.consumer.mingle - INFO - mingle: all alone
+2025-04-10 16:51:46,649 - celery.apps.worker - INFO - celery@Radhe-Radhe ready.
+2025-04-11 23:28:14,777 - celery.worker.consumer.connection - INFO - Connected to redis://localhost:6379/0
+2025-04-11 23:28:14,795 - celery.worker.consumer.mingle - INFO - mingle: searching for neighbors
+2025-04-11 23:28:15,839 - celery.worker.consumer.mingle - INFO - mingle: all alone
+2025-04-11 23:28:15,915 - celery.apps.worker - INFO - celery@Radhe-Radhe ready.
+2025-04-11 23:46:11,555 - celery.worker.consumer.connection - INFO - Connected to redis://localhost:6379/0
+2025-04-11 23:46:11,563 - celery.worker.consumer.mingle - INFO - mingle: searching for neighbors
+2025-04-11 23:46:12,610 - celery.worker.consumer.mingle - INFO - mingle: all alone
+2025-04-11 23:46:12,657 - celery.apps.worker - INFO - celery@Radhe-Radhe ready.

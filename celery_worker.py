@@ -2,6 +2,7 @@ import os
 import logging
 from celery import Celery
 from celery.signals import after_setup_logger, after_setup_task_logger
+import platform
 
 # Configure logging
 logging.basicConfig(
@@ -16,6 +17,15 @@ celery = Celery(
     broker=os.getenv("REDIS_URL", "redis://localhost:6379/0"),
     backend=os.getenv("REDIS_URL", "redis://localhost:6379/0")
 )
+
+# Windows-specific configuration
+if platform.system() == 'Windows':
+    celery.conf.update(
+        worker_pool='solo',  # Use solo pool for Windows
+        worker_concurrency=1,  # Single worker process
+        task_always_eager=False,
+        broker_connection_retry_on_startup=True
+    )
 
 # Celery configuration
 celery.conf.update(

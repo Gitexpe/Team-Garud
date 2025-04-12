@@ -1,10 +1,12 @@
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 import os
 from dotenv import load_dotenv
 from typing import List
 import logging
+from database import get_db, engine, Base
 
 # Load environment variables
 load_dotenv()
@@ -36,6 +38,21 @@ app.add_middleware(
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "version": "1.0.0"}
+
+# Database test endpoint
+@app.get("/test-db")
+async def test_db(db: Session = Depends(get_db)):
+    try:
+        # Try to execute a simple query
+        result = db.execute(text("SELECT 1"))
+        return {"status": "success", "message": "Database connection successful"}
+    except Exception as e:
+        logger.error(f"Database connection failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Database connection failed: {str(e)}")
+# Celery test endpoint
+@app.get("/test-celery")
+def test_celery():
+    return {"message": "Celery is working!"}
 
 # Error handlers
 @app.exception_handler(HTTPException)
